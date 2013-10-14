@@ -7,7 +7,7 @@ One issue I ran into a difference between Redis and Memcached's protcol.
 
 In Memcached, the GET protocol (https://github.com/memcached/memcached/blob/master/doc/protocol.txt) returns 
 
-VALUE <key> <flags> <bytes> [<cas unique>]\r\n<data block>\r\n
+VALUE key flags bytes cas unique\r\ndata block\r\n
 
 For Redis, the GET protocol (http://redis.io/topics/protocol) does NOT return the key being accessed.  
 I'm going to assume that this was done to shave off extra bytes from the protcol.
