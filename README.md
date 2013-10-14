@@ -1,3 +1,28 @@
+# redistop
+forked from etsy' mctop.  
+
+Working in progress porting the monitoring concepts to Redis.  
+
+One issue I ran into a difference between Redis and Memcached's protcol.
+
+In Memcached, the GET protocol (https://github.com/memcached/memcached/blob/master/doc/protocol.txt) returns 
+
+VALUE <key> <flags> <bytes> [<cas unique>]\r\n<data block>\r\n
+
+For Redis, the GET protocol (http://redis.io/topics/protocol) does NOT return the key being accessed.  
+I'm going to assume that this was done to shave off extra bytes from the protcol.
+
+Instead the Redis protocol returns:
+$length_of_value\r\nreturned_value\r\n
+
+I can sniff the GET protocol over Redis, but I can't assume that the next packet I'll be receiving is the returned 
+value because libpcap isn't perfect and may drop packets.  
+
+I'll implement this now just as a rough approximation for key usage and bandwidth, but it's not a 100% solution.  
+
+I like the idea of passively sniffing the ethernet interface rather than using the Redis MONITOR command and forcing 
+the server to do extra work streaming commands back to me.  Even that command doesn't tell me the return values.
+
 # mctop
 
 Inspired by "top", mctop passively sniffs the network traffic passing in and out of a
